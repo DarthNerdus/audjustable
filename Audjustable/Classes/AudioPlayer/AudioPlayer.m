@@ -570,9 +570,12 @@ static void AudioQueueIsRunningCallbackProc(void* userData, AudioQueueRef audioQ
      {
          pthread_mutex_lock(&playerMutex);
          {
-             [upcomingQueue enqueue:[[QueueEntry alloc] initWithDataSource:dataSourceIn andQueueItemId:queueItemId]];
-             
-             [self processQueue:NO];
+             // Don't queue the same item twice in a row.
+             if (![[[upcomingQueue firstObject] description] isEqual:queueItemId]) {
+                 [upcomingQueue enqueue:[[QueueEntry alloc] initWithDataSource:dataSourceIn andQueueItemId:queueItemId]];
+
+                 [self processQueue:NO];
+             }
          }
          pthread_mutex_unlock(&playerMutex);
      }];
