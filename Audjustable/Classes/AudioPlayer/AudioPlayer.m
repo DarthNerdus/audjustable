@@ -964,7 +964,7 @@ static void AudioQueueIsRunningCallbackProc(void* userData, AudioQueueRef audioQ
         }
     }
     
-    if (signal || YES)
+    if (signal)
     {
         pthread_cond_signal(&queueBufferReadyCondition);
     }
